@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  gateway:
+    build: ./Gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway-db
+    volumes:
+      - node_db_data:/var/lib/postgresql/data
+  service1:
+    build: ./service1
+    ports:
+      - "3001:3001"
+    environment:
+      - DB_DATABASE=Docker_Microservices
+      - DB_USER=postgres
+      - DB_PASSWORD=Neel@232003
+      - DB_HOST=service1-db
+      - PORT=3001      
+    depends_on:
+      - service1-db
+    volumes:
+      - node_db_data:/var/lib/postgresql/data
+  service2:
+    build: ./service2
+    ports:
+      - "3002:3002"
+    environment:
+      - DB_DATABASE=Docker_Microservices
+      - DB_USER=postgres
+      - DB_PASSWORD=Neel@232003
+      - DB_HOST=service2-db
+      - PORT=3002  
+    depends_on:
+      - service2-db
+    volumes:
+      - node_db_data:/var/lib/postgresql/data
+
+  gateway-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: Docker_Microservices
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Neel@232003
+    ports:
+      - "5432:5432"
+  service1-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: Docker_Microservices
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Neel@232003
+    ports:
+      - "5433:5432"
+  service2-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: Docker_Microservices
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Neel@232003
+    ports:
+      - "5434:5432"
+volumes:
+  node_db_data: {}
